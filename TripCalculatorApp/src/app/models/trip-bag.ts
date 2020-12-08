@@ -4,8 +4,11 @@
  */
 
 import { TripElement } from "./trip-element";
+import { Trip } from "./trip";
 
 export class TripBag {
     id: number;
     elements: TripElement[];
+    trip: Trip;
+    tripId: number;
 }

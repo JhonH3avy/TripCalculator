@@ -3,11 +3,7 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-import { DayOfWork } from "./day-of-work";
-
-export class TripElement {
+export class AppUser {
     id: number;
-    weight: number;
-    dayOfWork: DayOfWork;
-    dayOfWorkId: number;
+    identityNumber: string;
 }

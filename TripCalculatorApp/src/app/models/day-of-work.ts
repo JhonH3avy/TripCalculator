@@ -4,8 +4,10 @@
  */
 
 import { TripElement } from "./trip-element";
+import { AppUser } from "./app-user";
 
 export class DayOfWork {
     id: number;
     elements: TripElement[];
+    user: AppUser;
 }
