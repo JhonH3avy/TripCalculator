@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Data;
 using Entities;
@@ -26,6 +27,12 @@ namespace Controllers
         public async Task<ActionResult<Trip>> CalculateTrip([FromBody] DayOfWork dow)
         {
             _logger.Log(LogLevel.Information, $"{nameof(TripController)}: {nameof(CalculateTrip)}", dow);
+            if (string.IsNullOrEmpty(dow.User.IdentityNumber))
+            {
+                var ex = new NullReferenceException("IdentityNumber in DayOfWork.User is empty or null");
+                _logger.LogError($"{nameof(TripController)}: {nameof(CalculateTrip)}", ex);
+                return null;
+            }
             return await _calculationService.CalculateTripAsync(dow);
         }
     }
