@@ -21,12 +21,15 @@ namespace TripCalculatorServer.Data.Migrations
 
             modelBuilder.Entity("Entities.AppUser", b =>
                 {
-                    b.Property<int>("IdentityNumber")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.HasKey("IdentityNumber");
+                    b.Property<string>("IdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
@@ -38,12 +41,12 @@ namespace TripCalculatorServer.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("UserIdentityNumber")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserIdentityNumber");
+                    b.HasIndex("UserId");
 
                     b.ToTable("DayOfWorks");
                 });
@@ -106,7 +109,7 @@ namespace TripCalculatorServer.Data.Migrations
                 {
                     b.HasOne("Entities.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserIdentityNumber");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

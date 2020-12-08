@@ -6,7 +6,7 @@ namespace Entities
     [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class AppUser
     {
-        [Key]   
-        public int IdentityNumber { get; set; }
+        public int Id { get; set; }
+        public string IdentityNumber { get; set; }
     }
 }
