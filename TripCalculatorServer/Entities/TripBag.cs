@@ -7,5 +7,9 @@ namespace Entities
     {
         public int Id { get; set; }
         public TripElement[] Elements { get; set; }
+
+        public Trip Trip { get; set; }
+
+        public int TripId { get; set; }
     }
 }

@@ -1,9 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+using TypeGen.Core.TypeAnnotations;
+
 namespace Entities
 {
+    [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class AppUser
     {
-        public int Id { get; set; }
-        
-        public string UserName { get; set; }
+        [Key]   
+        public int IdentityNumber { get; set; }
     }
 }

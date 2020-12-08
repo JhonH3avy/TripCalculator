@@ -8,5 +8,7 @@ namespace Entities
         public int Id { get; set; }
 
         public TripElement[] Elements { get; set; }
+
+        public AppUser User { get; set; }
     }
 }

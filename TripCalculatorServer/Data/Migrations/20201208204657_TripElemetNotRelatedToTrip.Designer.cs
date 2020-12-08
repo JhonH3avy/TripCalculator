@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace TripCalculatorServer.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201208204657_TripElemetNotRelatedToTrip")]
+    partial class TripElemetNotRelatedToTrip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,12 +23,15 @@ namespace TripCalculatorServer.Data.Migrations
 
             modelBuilder.Entity("Entities.AppUser", b =>
                 {
-                    b.Property<int>("IdentityNumber")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.HasKey("IdentityNumber");
+                    b.Property<string>("IdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
@@ -38,12 +43,7 @@ namespace TripCalculatorServer.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("UserIdentityNumber")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserIdentityNumber");
 
                     b.ToTable("DayOfWorks");
                 });
@@ -100,15 +100,6 @@ namespace TripCalculatorServer.Data.Migrations
                     b.HasIndex("TripBagId");
 
                     b.ToTable("TripElements");
-                });
-
-            modelBuilder.Entity("Entities.DayOfWork", b =>
-                {
-                    b.HasOne("Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserIdentityNumber");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.TripBag", b =>

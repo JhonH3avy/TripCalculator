@@ -16,8 +16,6 @@ namespace Data
 
         public DbSet<TripBag> TripBags { get; set; }
 
-        public DbSet<TripElement> TripElements { get; set; }
-
         public DbSet<DayOfWork> DayOfWorks { get; set; }
     }
 }
