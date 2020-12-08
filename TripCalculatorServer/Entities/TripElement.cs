@@ -2,7 +2,7 @@ using TypeGen.Core.TypeAnnotations;
 
 namespace Entities
 {
-    [ExportTsClass]
+    [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class TripElement
     {
         public int Id { get; set; }

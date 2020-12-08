@@ -1,8 +1,7 @@
 using TypeGen.Core.TypeAnnotations;
-
 namespace Entities
 {
-    [ExportTsClass]
+    [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class Trip
     {
         public int Id { get; set; }
