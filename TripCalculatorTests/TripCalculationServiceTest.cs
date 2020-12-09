@@ -3,10 +3,10 @@ using Xunit;
 
 namespace TripCalculatorTests
 {
-    public class UnitTest1
+    public class TripCalculationServiceTest
     {
         [Fact]
-        public void Test1()
+        public void CreateTwoTripBagsForTrip()
         {
 
         }
