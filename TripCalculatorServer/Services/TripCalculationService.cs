@@ -31,12 +31,16 @@ namespace Services
 
             var trip = new Trip();
 
+            while (trip.ElementsAmount < dow.Elements.Count())
+            {
+                var tripBag = CreateTripBag(dow.Elements);
+                trip.Bags.Add(tripBag);
+            }
 
-
-            return null;
+            return trip;
         }
 
-        private async Task<TripBag> CreateTripBag(IEnumerable<TripElement> elements)
+        private TripBag CreateTripBag(IEnumerable<TripElement> elements)
         {
             var maxWeight = _config.GetSection("Calculation").GetValue<int>("MaxWeight");
             var elementsByWeight = elements.OrderByDescending(e => e.Weight).ToList();
