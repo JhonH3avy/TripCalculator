@@ -9,7 +9,7 @@ namespace Entities
     public class Trip
     {
         public int Id { get; set; }
-        public ICollection<TripBag> Bags { get; set; }
+        public ICollection<TripBag> Bags { get; set; } = new List<TripBag>();
 
         [NotMapped]
         public int ElementsAmount => Bags.Sum(b => b.Elements.Count);

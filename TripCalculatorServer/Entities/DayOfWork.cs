@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TypeGen.Core.TypeAnnotations;
 
 namespace Entities
@@ -7,7 +8,7 @@ namespace Entities
     {
         public int Id { get; set; }
 
-        public TripElement[] Elements { get; set; }
+        public ICollection<TripElement> Elements { get; set; }
 
         public AppUser User { get; set; }
     }

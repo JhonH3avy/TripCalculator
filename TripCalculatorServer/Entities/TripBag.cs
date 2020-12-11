@@ -9,13 +9,13 @@ namespace Entities
     public class TripBag
     {
         public int Id { get; set; }
-        public ICollection<TripElement> Elements { get; set; }
+        public ICollection<TripElement> Elements { get; set; } = new List<TripElement>();
 
         [NotMapped]
         public int BagWeight => Elements.Sum(e => e.Weight);
 
         [NotMapped]
-        public int AparentBagWeight => Elements.Count() * TopElement.Weight;
+        public int AparentBagWeight => Elements.Count() * (TopElement != null ? TopElement.Weight : 0);
 
         [NotMapped]
         public TripElement TopElement => Elements.FirstOrDefault(e => e.Weight == Elements.Max(e => e.Weight));
