@@ -6,9 +6,9 @@ namespace Services
 {
     public class BaseService : IBaseService
     {
-        protected readonly DataContext _context;
+        protected readonly IDataContext _context;
         protected readonly ILogger<IBaseService> _logger;
-        public BaseService(DataContext context, ILogger<IBaseService> logger)
+        public BaseService(IDataContext context, ILogger<IBaseService> logger)
         {
             _logger = logger;
             _context = context;

@@ -5,51 +5,91 @@ using Microsoft.Extensions.Logging;
 using Services.Interfaces;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 
 namespace Services
 {
     public class TripCalculationService : BaseService, ITripCalculationService
     {
-        private readonly IConfiguration _config;
-        public TripCalculationService(DataContext context, ILogger<IBaseService> logger, IConfiguration config) : base(context, logger)
+        private readonly IConfigurationService _config;
+        private readonly IUserService _userService;
+        private readonly IDayOfWorkService _dayOfWorkService;
+        private readonly ITripService _tripService;
+
+        private readonly int _maxWeight;
+
+        public TripCalculationService(
+            IDataContext context,
+            ILogger<IBaseService> logger,
+            IConfigurationService config,
+            IUserService userService,
+            IDayOfWorkService dayOfWorkService,
+            ITripService tripService) : base(context, logger)
         {
+            _userService = userService;
+            _dayOfWorkService = dayOfWorkService;
+            _tripService = tripService;
             _config = config;
+            _maxWeight = _config.GatValueInSection<int>("Calculation", "MaxWeight");
         }
 
         public async Task<Trip> CalculateTripAsync(DayOfWork dow)
         {
-            _logger.Log(LogLevel.Information, $"{nameof(TripCalculationService)}: {nameof(CalculateTripAsync)}", dow);
+            _logger.Log(LogLevel.Information, $"{nameof(TripCalculationService)}: {nameof(CalculateTripAsync)}: started", dow);
 
-            var user = _context.Users.First(u => u.IdentityNumber == dow.User.IdentityNumber);
+            var user = _userService.GetUserByIdentityNumber(dow.User.IdentityNumber);
             if (user == null)
             {
-                await _context.Users.AddAsync(dow.User);
+                await _userService.AddUserAsync(dow.User);
             }
 
-            await _context.DayOfWorks.AddAsync(dow);
+            await _dayOfWorkService.AddDayOfWorkAsync(dow);
 
             var trip = new Trip();
 
             while (trip.ElementsAmount < dow.Elements.Count())
             {
-                var tripBag = CreateTripBag(dow.Elements);
-                trip.Bags.Add(tripBag);
+                var tripBag = CreateTripBag(dow.Elements.Where(e => !trip.Bags.Any(b => b.Elements.Contains(e))));
+                if (tripBag.AparentBagWeight < _maxWeight)
+                {
+                    MergeBagToLighestBag(trip, tripBag);
+                }
+                else
+                {
+                    trip.Bags.Add(tripBag);
+                }
             }
+
+            await _tripService.AddTripAsync(trip);
+
+            _logger.LogInformation($"{nameof(TripCalculationService)}: {nameof(CalculateTripAsync)}: finished", trip);
 
             return trip;
         }
 
+        private void MergeBagToLighestBag(Trip trip, TripBag tripBag)
+        {
+            while (tripBag.Elements.Count > 0)
+            {
+                var lightestBag = trip.Bags.OrderBy(b => b.AparentBagWeight).First();
+                var element = tripBag.Elements.First();
+                lightestBag.Elements.Add(element);
+                tripBag.Elements.Remove(element);
+            }
+        }
+
         private TripBag CreateTripBag(IEnumerable<TripElement> elements)
         {
-            var maxWeight = _config.GetSection("Calculation").GetValue<int>("MaxWeight");
             var elementsByWeight = elements.OrderByDescending(e => e.Weight).ToList();
             var tripBag = new TripBag();
-            tripBag.Elements = new List<TripElement>();
+            var possibleWeight = elements.Sum(e => e.Weight);
 
-            while (tripBag.AparentBagWeight < maxWeight)
+            while (tripBag.AparentBagWeight < _maxWeight)
             {
                 var element = GetBestElement(elementsByWeight, tripBag);
+                if (element == null)
+                {
+                    break;
+                }
                 tripBag.Elements.Add(element);
             }
             return tripBag;
@@ -62,7 +102,7 @@ namespace Services
             {
                 return nonUsedElements.First();
             }
-            return nonUsedElements.Last();
+            return nonUsedElements.LastOrDefault();
         }
     }
 }
