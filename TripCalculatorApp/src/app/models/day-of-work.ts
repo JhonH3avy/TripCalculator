@@ -6,9 +6,9 @@
 import { TripElement } from "./trip-element";
 import { AppUser } from "./app-user";
 
-export class DayOfWork {
-    id: number;
+export interface DayOfWork {
+    id?: number;
     elements: TripElement[];
-    user: AppUser;
-    createdAt: Date = new Date("11/12/2020 12:22:24 p. m.");
+    user?: AppUser;
+    createdAt: Date;
 }

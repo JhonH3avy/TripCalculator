@@ -3,10 +3,13 @@ using TypeGen.Core.TypeAnnotations;
 
 namespace Entities
 {
-    [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
+    [ExportTsInterface(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class AppUser
     {
+        [TsOptional]
         public int Id { get; set; }
+
+        [TsOptional]
         public string IdentityNumber { get; set; }
     }
 }

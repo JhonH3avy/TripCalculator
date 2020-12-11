@@ -6,20 +6,17 @@ using System;
 
 namespace Entities
 {
-    [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
+    [ExportTsInterface(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class Trip
     {
-        public Trip()
-        {
-            CreatedAt = DateTime.UtcNow;
-        }
-
+        [TsOptional]
         public int Id { get; set; }
         public ICollection<TripBag> Bags { get; set; } = new List<TripBag>();
 
         [NotMapped]
+        [TsIgnore]
         public int ElementsAmount => Bags.Sum(b => b.Elements.Count);
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

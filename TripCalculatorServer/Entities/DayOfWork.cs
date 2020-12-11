@@ -4,20 +4,17 @@ using System;
 
 namespace Entities
 {
-    [ExportTsClass(OutputDir = "../TripCalculatorApp/src/app/models")]
+    [ExportTsInterface(OutputDir = "../TripCalculatorApp/src/app/models")]
     public class DayOfWork
     {
-        public DayOfWork()
-        {
-            CreatedAt = DateTime.UtcNow;
-        }
-
+        [TsOptional]
         public int Id { get; set; }
 
-        public ICollection<TripElement> Elements { get; set; }
+        public ICollection<TripElement> Elements { get; set; } = new List<TripElement>();
 
+        [TsOptional]
         public AppUser User { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

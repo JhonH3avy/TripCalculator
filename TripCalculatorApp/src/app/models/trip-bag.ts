@@ -4,14 +4,8 @@
  */
 
 import { TripElement } from "./trip-element";
-import { Trip } from "./trip";
 
-export class TripBag {
-    id: number;
-    elements: TripElement[] = [];
-    bagWeight: number;
-    aparentBagWeight: number;
-    topElement: TripElement;
-    trip: Trip;
-    tripId: number;
+export interface TripBag {
+    id?: number;
+    elements: TripElement[];
 }

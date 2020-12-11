@@ -5,9 +5,8 @@
 
 import { TripBag } from "./trip-bag";
 
-export class Trip {
-    id: number;
-    bags: TripBag[] = [];
-    elementsAmount: number;
-    createdAt: Date = new Date("11/12/2020 12:22:25 p. m.");
+export interface Trip {
+    id?: number;
+    bags: TripBag[];
+    createdAt: Date;
 }
