@@ -12,9 +12,11 @@ namespace Services
         {
         }
 
-        public async Task AddDayOfWorkAsync(DayOfWork dow)
+        public async Task<DayOfWork> AddDayOfWorkAsync(DayOfWork dow)
         {
-            await _context.DayOfWorks.AddAsync(dow);
+            var result = await _context.DayOfWorks.AddAsync(dow);
+            await _context.SaveAsync();
+            return result.Entity;
         }
     }
 }

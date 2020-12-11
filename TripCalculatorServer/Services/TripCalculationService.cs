@@ -37,10 +37,10 @@ namespace Services
             var user = _userService.GetUserByIdentityNumber(dow.User.IdentityNumber);
             if (user == null)
             {
-                await _userService.AddUserAsync(dow.User);
+                dow.User = await _userService.AddUserAsync(dow.User);
             }
 
-            await _dayOfWorkService.AddDayOfWorkAsync(dow);
+            dow = await _dayOfWorkService.AddDayOfWorkAsync(dow);
 
             var trip = new Trip();
 
@@ -57,7 +57,7 @@ namespace Services
                 }
             }
 
-            await _tripService.AddTripAsync(trip);
+            trip = await _tripService.AddTripAsync(trip);
 
             _logger.LogInformation($"{nameof(TripCalculationService)}: {nameof(CalculateTripAsync)}: finished", trip);
 

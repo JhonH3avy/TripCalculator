@@ -13,6 +13,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Services.Interfaces;
+using Services;
+using AutoMapper;
+using Helpers;
 
 namespace TripCalculatorServer
 {
@@ -32,6 +36,14 @@ namespace TripCalculatorServer
             services.AddDbContext<DataContext>(options => {
                 options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<IBaseService, BaseService>();
+            services.AddScoped<ITripCalculationService, TripCalculationService>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
+            services.AddScoped<ITripService, TripService>();
+            services.AddScoped<IDayOfWorkService, DayOfWorkService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDataContext, DataContext>();
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

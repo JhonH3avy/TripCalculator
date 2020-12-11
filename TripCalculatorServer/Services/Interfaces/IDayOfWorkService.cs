@@ -5,6 +5,6 @@ namespace Services.Interfaces
 {
     public interface IDayOfWorkService
     {
-        Task AddDayOfWorkAsync(DayOfWork dow);
+        Task<DayOfWork> AddDayOfWorkAsync(DayOfWork dow);
     }
 }

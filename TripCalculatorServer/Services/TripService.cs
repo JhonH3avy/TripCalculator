@@ -11,9 +11,11 @@ namespace Services.Interfaces
         {
         }
 
-        public async Task AddTripAsync(Trip trip)
+        public async Task<Trip> AddTripAsync(Trip trip)
         {
-            await _context.Trips.AddAsync(trip);
+            var result = await _context.Trips.AddAsync(trip);
+            await _context.SaveAsync();
+            return result.Entity;
         }
     }
 }

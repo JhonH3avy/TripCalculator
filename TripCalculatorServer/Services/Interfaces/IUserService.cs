@@ -9,6 +9,6 @@ namespace Services.Interfaces
 
         Task<AppUser> GetUserByIdAsync(int userId);
 
-        Task AddUserAsync(AppUser user);
+        Task<AppUser> AddUserAsync(AppUser user);
     }
 }

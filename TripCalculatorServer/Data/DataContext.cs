@@ -1,5 +1,6 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -17,5 +18,10 @@ namespace Data
         public DbSet<TripBag> TripBags { get; set; }
 
         public DbSet<DayOfWork> DayOfWorks { get; set; }
+
+        public async Task<int> SaveAsync()
+        {
+            return await SaveChangesAsync();
+        }
     }
 }

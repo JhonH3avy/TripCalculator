@@ -5,6 +5,6 @@ namespace Services.Interfaces
 {
     public interface ITripService
     {
-        Task AddTripAsync(Trip trip);
+        Task<Trip> AddTripAsync(Trip trip);
     }
 }

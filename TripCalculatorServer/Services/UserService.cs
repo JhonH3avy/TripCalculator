@@ -4,6 +4,7 @@ using Data;
 using Entities;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -23,9 +24,11 @@ namespace Services
             return await _context.Users.FindAsync(userId);
         }
 
-        public async Task AddUserAsync(AppUser user)
+        public async Task<AppUser> AddUserAsync(AppUser user)
         {
-            await _context.Users.AddAsync(user);
+            var result = await _context.Users.AddAsync(user);
+            await _context.SaveAsync();
+            return result.Entity;
         }
     }
 }

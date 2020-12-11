@@ -5,6 +5,8 @@ using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services.Interfaces;
+using DTOs;
+using AutoMapper;
 
 namespace Controllers
 {
@@ -16,15 +18,19 @@ namespace Controllers
         private readonly ILogger<TripController> _logger;
         private readonly ITripCalculationService _calculationService;
 
+        private readonly IMapper _mapper;
+
         public TripController(ILogger<TripController> logger,
-        ITripCalculationService calculationService)
+        ITripCalculationService calculationService,
+        IMapper mapper)
         {
             _calculationService = calculationService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Trip>> CalculateTrip([FromBody] DayOfWork dow)
+        public async Task<ActionResult<TripDto>> CalculateTrip([FromBody] DayOfWork dow)
         {
             _logger.Log(LogLevel.Information, $"{nameof(TripController)}: {nameof(CalculateTrip)}", dow);
             if (string.IsNullOrEmpty(dow.User.IdentityNumber))
@@ -33,7 +39,9 @@ namespace Controllers
                 _logger.LogError($"{nameof(TripController)}: {nameof(CalculateTrip)}", ex);
                 return null;
             }
-            return await _calculationService.CalculateTripAsync(dow);
+            var trip = await _calculationService.CalculateTripAsync(dow);
+            var tripDto = _mapper.Map<TripDto>(trip);
+            return Ok(tripDto);
         }
     }
 }
