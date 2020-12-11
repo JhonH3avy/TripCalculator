@@ -10,4 +10,5 @@ export class DayOfWork {
     id: number;
     elements: TripElement[];
     user: AppUser;
+    createdAt: Date = new Date("11/12/2020 12:22:24 p. m.");
 }

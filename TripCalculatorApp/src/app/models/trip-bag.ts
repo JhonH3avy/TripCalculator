@@ -8,7 +8,10 @@ import { Trip } from "./trip";
 
 export class TripBag {
     id: number;
-    elements: TripElement[];
+    elements: TripElement[] = [];
+    bagWeight: number;
+    aparentBagWeight: number;
+    topElement: TripElement;
     trip: Trip;
     tripId: number;
 }
