@@ -11,14 +11,14 @@ using System.Collections.Generic;
 
 namespace TripCalculatorTests.Services
 {
-    public class TripCalculationServiceTest : IDisposable
+    public class TripCalculationServiceTest
     {
-        private ITripService tripService;
-        private ITripCalculationService calculationService;
-        private IUserService userService;
-        private IDayOfWorkService dowService;
+        private readonly ITripService tripService;
+        private readonly ITripCalculationService calculationService;
+        private readonly IUserService userService;
+        private readonly IDayOfWorkService dowService;
 
-        private AppUser user;
+        private readonly AppUser user;
 
         private readonly int maxWeight = 50;
 
@@ -38,21 +38,20 @@ namespace TripCalculatorTests.Services
             calculationService = new TripCalculationService(dataContext, logger, config, userService, dowService, tripService);
         }
 
-        public void Dispose()
-        {
-            
-        }
-
         [Fact]
         public async void CreateTwoTripBagsForTrip()
         {            
-            var dow = new DayOfWork();
-            dow.User = user;
-            dow.Elements = new List<TripElement>();
-            dow.Elements.Add(new TripElement { Id = 1, Weight = 30 });
-            dow.Elements.Add(new TripElement { Id = 2, Weight = 30 });
-            dow.Elements.Add(new TripElement { Id = 3, Weight = 1 });
-            dow.Elements.Add(new TripElement { Id = 4, Weight = 1 });
+            var dow = new DayOfWork
+            {
+                User = user,
+                Elements = new List<TripElement>
+                {
+                    new TripElement { Id = 1, Weight = 30 },
+                    new TripElement { Id = 2, Weight = 30 },
+                    new TripElement { Id = 3, Weight = 1 },
+                    new TripElement { Id = 4, Weight = 1 }
+                }
+            };
             var result = await calculationService.CalculateTripAsync(dow);
             Assert.Equal(2, result.Bags.Count);
             Assert.True(result.Bags.All(b => b.BagWeight == 31));
@@ -61,12 +60,16 @@ namespace TripCalculatorTests.Services
         [Fact]
         public async void CreateOneTripBagWhenThereIsNoOption()
         {
-            var dow = new DayOfWork();
-            dow.User = user;
-            dow.Elements = new List<TripElement>();
-            dow.Elements.Add(new TripElement { Id = 1, Weight = 20 });
-            dow.Elements.Add(new TripElement { Id = 2, Weight = 20 });
-            dow.Elements.Add(new TripElement { Id = 3, Weight = 20 });
+            var dow = new DayOfWork
+            {
+                User = user,
+                Elements = new List<TripElement>
+                {
+                    new TripElement { Id = 1, Weight = 20 },
+                    new TripElement { Id = 2, Weight = 20 },
+                    new TripElement { Id = 3, Weight = 20 }
+                }
+            };
             var result = await calculationService.CalculateTripAsync(dow);
             Assert.Equal(1, result.Bags.Count);
             Assert.Equal(60, result.Bags.Sum(b => b.BagWeight));
@@ -75,20 +78,24 @@ namespace TripCalculatorTests.Services
         [Fact]
         public async void CreateTwoTripBagsWhenThereIsRoom()
         {
-            var dow = new DayOfWork();
-            dow.User = user;
-            dow.Elements = new List<TripElement>();
-            dow.Elements.Add(new TripElement { Id = 1, Weight = 1 });
-            dow.Elements.Add(new TripElement { Id = 2, Weight = 2 });
-            dow.Elements.Add(new TripElement { Id = 3, Weight = 3 });
-            dow.Elements.Add(new TripElement { Id = 4, Weight = 4 });
-            dow.Elements.Add(new TripElement { Id = 5, Weight = 5 });
-            dow.Elements.Add(new TripElement { Id = 6, Weight = 6 });
-            dow.Elements.Add(new TripElement { Id = 7, Weight = 7 });
-            dow.Elements.Add(new TripElement { Id = 8, Weight = 8 });
-            dow.Elements.Add(new TripElement { Id = 9, Weight = 9 });
-            dow.Elements.Add(new TripElement { Id = 10, Weight = 10 });
-            dow.Elements.Add(new TripElement { Id = 11, Weight = 11 });
+            var dow = new DayOfWork 
+            {
+                User = user,
+                Elements = new List<TripElement>
+                {
+                    new TripElement { Id = 1, Weight = 1 },
+                    new TripElement { Id = 2, Weight = 2 },
+                    new TripElement { Id = 3, Weight = 3 },
+                    new TripElement { Id = 4, Weight = 4 },
+                    new TripElement { Id = 5, Weight = 5 },
+                    new TripElement { Id = 6, Weight = 6 },
+                    new TripElement { Id = 7, Weight = 7 },
+                    new TripElement { Id = 8, Weight = 8 },
+                    new TripElement { Id = 9, Weight = 9 },
+                    new TripElement { Id = 10, Weight = 10 },
+                    new TripElement { Id = 11, Weight = 11 }
+                }
+            };
             var result = await calculationService.CalculateTripAsync(dow);
             Assert.Equal(2, result.Bags.Count);
             Assert.True(result.Bags.All(b => b.BagWeight < maxWeight));
@@ -97,15 +104,19 @@ namespace TripCalculatorTests.Services
         [Fact]
         public async void CreateThreeTripBagWhenThereIsTooMuchElements()
         {
-            var dow = new DayOfWork();
-            dow.User = user;
-            dow.Elements = new List<TripElement>();
-            dow.Elements.Add(new TripElement { Id = 1, Weight = 9 });
-            dow.Elements.Add(new TripElement { Id = 2, Weight = 19 });
-            dow.Elements.Add(new TripElement { Id = 3, Weight = 29 });
-            dow.Elements.Add(new TripElement { Id = 4, Weight = 39 });
-            dow.Elements.Add(new TripElement { Id = 5, Weight = 49 });
-            dow.Elements.Add(new TripElement { Id = 6, Weight = 59 });
+            var dow = new DayOfWork
+            {
+                User = user,
+                Elements = new List<TripElement>
+                {
+                    new TripElement { Id = 1, Weight = 9 },
+                    new TripElement { Id = 2, Weight = 19 },
+                    new TripElement { Id = 3, Weight = 29 },
+                    new TripElement { Id = 4, Weight = 39 },
+                    new TripElement { Id = 5, Weight = 49 },
+                    new TripElement { Id = 6, Weight = 59 }
+                }
+            };
             var result = await calculationService.CalculateTripAsync(dow);
             Assert.Equal(3, result.Bags.Count);
         }
@@ -113,19 +124,23 @@ namespace TripCalculatorTests.Services
         [Fact]
         public async void CreateEightTripBagsForTheBorderCase()
         {
-            var dow = new DayOfWork();
-            dow.User = user;
-            dow.Elements = new List<TripElement>();
-            dow.Elements.Add(new TripElement { Id = 1, Weight = 32 });
-            dow.Elements.Add(new TripElement { Id = 2, Weight = 56 });
-            dow.Elements.Add(new TripElement { Id = 3, Weight = 76 });
-            dow.Elements.Add(new TripElement { Id = 4, Weight = 8 });
-            dow.Elements.Add(new TripElement { Id = 5, Weight = 44 });
-            dow.Elements.Add(new TripElement { Id = 6, Weight = 60 });
-            dow.Elements.Add(new TripElement { Id = 7, Weight = 47 });
-            dow.Elements.Add(new TripElement { Id = 8, Weight = 85 });
-            dow.Elements.Add(new TripElement { Id = 9, Weight = 71 });
-            dow.Elements.Add(new TripElement { Id = 10, Weight = 91 });
+            var dow = new DayOfWork
+            {
+                User = user,
+                Elements = new List<TripElement>
+                {
+                    new TripElement { Id = 1, Weight = 32 },
+                    new TripElement { Id = 2, Weight = 56 },
+                    new TripElement { Id = 3, Weight = 76 },
+                    new TripElement { Id = 4, Weight = 8 },
+                    new TripElement { Id = 5, Weight = 44 },
+                    new TripElement { Id = 6, Weight = 60 },
+                    new TripElement { Id = 7, Weight = 47 },
+                    new TripElement { Id = 8, Weight = 85 },
+                    new TripElement { Id = 9, Weight = 71 },
+                    new TripElement { Id = 10, Weight = 91 }
+                }
+            };
             var result = await calculationService.CalculateTripAsync(dow);
             Assert.Equal(8, result.Bags.Count);
         }

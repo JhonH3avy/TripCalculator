@@ -10,7 +10,6 @@ namespace Services
 {
     public class TripCalculationService : BaseService, ITripCalculationService
     {
-        private readonly IConfigurationService _config;
         private readonly IUserService _userService;
         private readonly IDayOfWorkService _dayOfWorkService;
         private readonly ITripService _tripService;
@@ -28,8 +27,7 @@ namespace Services
             _userService = userService;
             _dayOfWorkService = dayOfWorkService;
             _tripService = tripService;
-            _config = config;
-            _maxWeight = _config.GatValueInSection<int>("Calculation", "MaxWeight");
+            _maxWeight = config.GatValueInSection<int>("Calculation", "MaxWeight");
         }
 
         public async Task<Trip> CalculateTripAsync(DayOfWork dow)
@@ -46,7 +44,7 @@ namespace Services
 
             var trip = new Trip();
 
-            while (trip.ElementsAmount < dow.Elements.Count())
+            while (trip.ElementsAmount < dow.Elements.Count)
             {
                 var tripBag = CreateTripBag(dow.Elements.Where(e => !trip.Bags.Any(b => b.Elements.Contains(e))));
                 if (tripBag.AparentBagWeight < _maxWeight)
@@ -66,22 +64,10 @@ namespace Services
             return trip;
         }
 
-        private void MergeBagToLighestBag(Trip trip, TripBag tripBag)
-        {
-            while (tripBag.Elements.Count > 0)
-            {
-                var lightestBag = trip.Bags.OrderBy(b => b.AparentBagWeight).First();
-                var element = tripBag.Elements.First();
-                lightestBag.Elements.Add(element);
-                tripBag.Elements.Remove(element);
-            }
-        }
-
         private TripBag CreateTripBag(IEnumerable<TripElement> elements)
         {
             var elementsByWeight = elements.OrderByDescending(e => e.Weight).ToList();
             var tripBag = new TripBag();
-            var possibleWeight = elements.Sum(e => e.Weight);
 
             while (tripBag.AparentBagWeight < _maxWeight)
             {
@@ -95,7 +81,18 @@ namespace Services
             return tripBag;
         }
 
-        private TripElement GetBestElement(IEnumerable<TripElement> elements, TripBag tripBag)
+        private static void MergeBagToLighestBag(Trip trip, TripBag tripBag)
+        {
+            while (tripBag.Elements.Count > 0)
+            {
+                var lightestBag = trip.Bags.OrderBy(b => b.AparentBagWeight).First();
+                var element = tripBag.Elements.First();
+                lightestBag.Elements.Add(element);
+                tripBag.Elements.Remove(element);
+            }
+        }
+
+        private static TripElement GetBestElement(IEnumerable<TripElement> elements, TripBag tripBag)
         {
             var nonUsedElements = elements.Where(e => !tripBag.Elements.Any(tbe => tbe.Id == e.Id));
             if (tripBag.TopElement == null)

@@ -15,7 +15,7 @@ namespace Entities
         public int BagWeight => Elements.Sum(e => e.Weight);
 
         [NotMapped]
-        public int AparentBagWeight => Elements.Count() * (TopElement != null ? TopElement.Weight : 0);
+        public int AparentBagWeight => Elements.Count * (TopElement != null ? TopElement.Weight : 0);
 
         [NotMapped]
         public TripElement TopElement => Elements.FirstOrDefault(e => e.Weight == Elements.Max(e => e.Weight));
