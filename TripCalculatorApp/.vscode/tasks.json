@@ -3,6 +3,13 @@
 	"tasks": [
 		{
 			"type": "npm",
+			"script": "build",
+			"problemMatcher": [],
+			"label": "build angular app",
+			"detail": "ng build"
+    },
+    {
+			"type": "npm",
 			"script": "start",
 			"problemMatcher": [],
 			"label": "serve angular app",

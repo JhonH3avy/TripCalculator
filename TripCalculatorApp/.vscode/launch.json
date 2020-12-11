@@ -4,14 +4,21 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "name": "Launch localhost",
-            "type": "firefox",
-            "request": "launch",
-            "reAttach": true,
-            "url": "http://localhost/8100",
-            "webRoot": "${workspaceFolder}",
-            "preLaunchTask": "serve angular app"
-        }
+      {
+        "type": "firefox",
+        "request": "attach",
+        "name": "Attach to localhost",
+        "url": "http://localhost/4200",
+        "port": 4200,
+        "webRoot": "${workspaceFolder}"
+      },
+      {
+          "name": "Launch localhost",
+          "type": "firefox",
+          "request": "launch",
+          "reAttach": true,
+          "url": "http://localhost:4200",
+          "webRoot": "${workspaceFolder}",
+      }
     ]
 }

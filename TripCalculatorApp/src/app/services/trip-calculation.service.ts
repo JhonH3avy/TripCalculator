@@ -10,19 +10,12 @@ import { Observable } from 'rxjs';
 })
 export class TripCalculationService {
 
-  private readonly controllerUrl = 'api/TripCalculation'
-  private baseHeaders: HttpHeaders;
-
+  private readonly controllerUrl = 'api/Trip';
   constructor(
     private http: HttpClient
-  ) {
-    this.baseHeaders = new HttpHeaders();
-    this.baseHeaders.append('access-control-allow-oring', '*');
-  }
+  ) {}
 
   calculateTrip(dow: DayOfWork): Observable<Trip> {
-    return this.http.post<Trip>(`${environment.hostUrl}/${this.controllerUrl}`, dow, {
-      headers: this.baseHeaders
-    });
+    return this.http.post<Trip>(`${environment.hostUrl}/${this.controllerUrl}`, dow);
   }
 }

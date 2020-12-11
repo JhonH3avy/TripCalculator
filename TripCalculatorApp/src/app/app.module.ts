@@ -12,6 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogAlertComponent } from './components/shared/dialog-alert/dialog-alert.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { DialogAlertComponent } from './components/shared/dialog-alert/dialog-al
     FlexLayoutModule,
     HttpClientModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

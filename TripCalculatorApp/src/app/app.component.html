@@ -1,11 +1,31 @@
-<form fxLayout="column" fxLayoutAlign="center center">
+<form fxLayout="column" fxLayoutAlign="center center" (submit)="sendInfo()">
   <mat-form-field appearance="fill">
     <mat-label>Cédula del trabajador</mat-label>
     <input matInput type="text" [(ngModel)]="identityNumber" name="identityNumber">
   </mat-form-field>
 
-  <input type="file" [(ngModel)]="file" name=file/>
+  <input type="file" [(ngModel)]="filePath" name="file" (change)="onFileSelected($event)"/>
+
+  <button mat-flat-button type="submit">Send file</button>
 
 </form>
+
+<table style="width: 100%; padding: 5%;" mat-table [dataSource]="trips" class="mat-elevation-z8" *ngIf="trips.length > 0">
+
+  <ng-container matColumnDef="case">
+    <th mat-header-cell *matHeaderCellDef> # Case </th>
+    <td mat-cell *matCellDef="let element">Case #{{element.id}}:</td>
+  </ng-container>
+
+  <ng-container matColumnDef="result">
+    <th mat-header-cell *matHeaderCellDef> Result </th>
+    <td mat-cell *matCellDef="let element">{{element.bags.length}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
 
 <router-outlet></router-outlet>

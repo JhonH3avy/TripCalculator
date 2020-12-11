@@ -14,13 +14,24 @@ import { MatDialog } from '@angular/material/dialog';
 export class AppComponent {
 
   identityNumber = '';
-  file?: File;
+  filePath = '';
+  file: File | null = null;
   trips: Trip[] = [];
+
+  displayedColumns: string[] = ['case', 'result'];
 
   constructor(
     private tripCalculation: TripCalculationService,
     private dialog: MatDialog
   ) {}
+
+  onFileSelected(event: Event): void {
+    const targetInput = event.target as HTMLInputElement;
+    const files = targetInput?.files;
+    if (files && files.length > 0) {
+      this.file = files[0];
+    }
+  }
 
   private openDialog(): void {
     const dialogRef = this.dialog.open(DialogAlertComponent, {
@@ -67,7 +78,10 @@ export class AppComponent {
     elementsWeight.forEach(e => elements.push({ weight: e}));
     return {
       elements,
-      createdAt: new Date()
+      createdAt: new Date(),
+      user: {
+        identityNumber: this.identityNumber
+      }
     };
   }
 
@@ -76,10 +90,15 @@ export class AppComponent {
     if (dows.length === 0) {
       return;
     }
+    const resultTrips: Trip[] = [];
     const dowsPromises = dows.map(async dow => {
       const trip = await this.tripCalculation.calculateTrip(dow).toPromise();
-      this.trips.push(trip);
+      resultTrips.push(trip);
     });
     await Promise.all(dowsPromises);
+    this.trips = resultTrips;
   }
+}
+interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
 }

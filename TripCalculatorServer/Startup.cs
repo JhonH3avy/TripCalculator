@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Services.Interfaces;
 using Services;
@@ -23,6 +16,7 @@ namespace TripCalculatorServer
     public class Startup
     {
 
+        private readonly string AllowAllOrigins = "_allowAllOrigins";
         private readonly IConfiguration _config;
 
         public Startup(IConfiguration config)
@@ -33,6 +27,7 @@ namespace TripCalculatorServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddDbContext<DataContext>(options => {
                 options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
@@ -64,6 +59,8 @@ namespace TripCalculatorServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors(policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 
